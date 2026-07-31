@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from ui.header import Header
 
 # ----------------------------
 # App Configuration
@@ -29,4 +30,7 @@ class SecureEncryptionToolkit(ctk.CTk):
 # ----------------------------
 if __name__ == "__main__":
     app = SecureEncryptionToolkit()
+
+    Header(app)
+    
     app.mainloop()
