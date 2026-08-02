@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from ui.header import Header
+from ui.sidebar import Sidebar
 
 # ----------------------------
 # App Configuration
@@ -32,5 +33,7 @@ if __name__ == "__main__":
     app = SecureEncryptionToolkit()
 
     Header(app)
+    
+    Sidebar(app)
     
     app.mainloop()
