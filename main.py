@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from ui.header import Header
 from ui.sidebar import Sidebar
+from ui.workspace import Workspace
 
 # ----------------------------
 # App Configuration
@@ -35,5 +36,6 @@ if __name__ == "__main__":
     Header(app)
     
     Sidebar(app)
+    Workspace(app)
     
     app.mainloop()
