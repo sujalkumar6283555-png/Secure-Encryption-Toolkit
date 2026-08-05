@@ -71,6 +71,7 @@ class SecureEncryptionToolkit(ctk.CTk):
         self.sidebar = Sidebar(self.content_frame)
         self.workspace = Workspace(self.content_frame)
         self.history = HistoryPanel(self.content_frame)
+        
 
 
 # ----------------------------

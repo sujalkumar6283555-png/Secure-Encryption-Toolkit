@@ -1,4 +1,6 @@
 import customtkinter as ctk
+from ui.cards.encryption_card import EncryptionCard
+
 
 
 class Workspace(ctk.CTkFrame):
@@ -17,10 +19,5 @@ class Workspace(ctk.CTkFrame):
     pady=10
 )
 
-        title = ctk.CTkLabel(
-            self,
-            text="Encryption Workspace",
-            font=("Segoe UI", 28, "bold")
-        )
-
-        title.pack(anchor="nw", padx=25, pady=(20, 10))
+       
+        self.card = EncryptionCard(self)
