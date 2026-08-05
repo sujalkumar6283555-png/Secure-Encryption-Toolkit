@@ -9,13 +9,13 @@ class Workspace(ctk.CTkFrame):
             corner_radius=0
         )
 
-        self.pack(
-            side="left",
-            fill="both",
-            expand=True,
-            padx=10,
-            pady=10
-        )
+        self.grid(
+    row=0,
+    column=1,
+    sticky="nsew",
+    padx=10,
+    pady=10
+)
 
         title = ctk.CTkLabel(
             self,

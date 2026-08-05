@@ -10,7 +10,11 @@ class Sidebar(ctk.CTkFrame):
             fg_color="#0F0F0F"
         )
 
-        self.pack(side="left", fill="y")
+        self.grid(
+    row=0,
+    column=0,
+    sticky="ns"
+)
 
         title = ctk.CTkLabel(
             self,
