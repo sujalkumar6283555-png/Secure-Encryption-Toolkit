@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from ui.cards.top_controls import TopControls
 
 
 class EncryptionCard(ctk.CTkFrame):
@@ -34,4 +35,4 @@ class EncryptionCard(ctk.CTkFrame):
         )
 
         subtitle.pack(anchor="nw", padx=25)
-        
+        self.controls = TopControls(self)
