@@ -8,44 +8,86 @@ class TextAreaSection(ctk.CTkFrame):
             fg_color="transparent"
         )
 
-        self.pack(fill="both", expand=True, padx=25, pady=20)
+        # --------------------------------
+        # GRID CONFIGURATION
+        # --------------------------------
 
-        # ----------------------------
-        # Input
-        # ----------------------------
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+
+        # --------------------------------
+        # INPUT LABEL
+        # --------------------------------
+
         input_label = ctk.CTkLabel(
             self,
             text="Input Text",
-            font=("Segoe UI", 16, "bold")
-        )
-        input_label.pack(anchor="w", pady=(0, 8))
-
-        self.input_text = ctk.CTkTextbox(
-            self,
-            height=170,
-            corner_radius=12,
-            border_width=1,
-            border_color="#2A2A2A"
+            font=("Segoe UI", 15, "bold")
         )
 
-        self.input_text.pack(fill="x")
+        input_label.grid(
+            row=0,
+            column=0,
+            sticky="w",
+            padx=(0, 10),
+            pady=(0, 8)
+        )
 
-        # ----------------------------
-        # Output
-        # ----------------------------
+        # --------------------------------
+        # OUTPUT LABEL
+        # --------------------------------
+
         output_label = ctk.CTkLabel(
             self,
             text="Output Text",
-            font=("Segoe UI", 16, "bold")
+            font=("Segoe UI", 15, "bold")
         )
-        output_label.pack(anchor="w", pady=(25, 8))
+
+        output_label.grid(
+            row=0,
+            column=1,
+            sticky="w",
+            padx=(10, 0),
+            pady=(0, 8)
+        )
+
+        # --------------------------------
+        # INPUT TEXTBOX
+        # --------------------------------
+
+        self.input_text = ctk.CTkTextbox(
+            self,
+            corner_radius=12,
+            border_width=1,
+            border_color="#333333",
+            fg_color="#111111",
+            font=("Segoe UI", 14)
+        )
+
+        self.input_text.grid(
+            row=1,
+            column=0,
+            sticky="nsew",
+            padx=(0, 10)
+        )
+
+        # --------------------------------
+        # OUTPUT TEXTBOX
+        # --------------------------------
 
         self.output_text = ctk.CTkTextbox(
             self,
-            height=170,
             corner_radius=12,
             border_width=1,
-            border_color="#2A2A2A"
+            border_color="#333333",
+            fg_color="#111111",
+            font=("Segoe UI", 14)
         )
 
-        self.output_text.pack(fill="x")
+        self.output_text.grid(
+            row=1,
+            column=1,
+            sticky="nsew",
+            padx=(10, 0)
+        )

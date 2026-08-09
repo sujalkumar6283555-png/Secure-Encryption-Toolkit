@@ -8,12 +8,13 @@ class TopControls(ctk.CTkFrame):
             fg_color="transparent"
         )
 
-        self.pack(fill="x", padx=25, pady=(20, 10))
+        
 
         # -------------------------
         # Grid Configuration
         # -------------------------
-        self.grid_columnconfigure((0, 1), weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
 
         # -------------------------
         # Algorithm
