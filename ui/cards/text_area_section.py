@@ -4,6 +4,8 @@ from tkinter import filedialog
 from core.caesar import encrypt, decrypt
 from core.vigenere import encrypt as vigenere_encrypt
 from core.vigenere import decrypt as vigenere_decrypt
+from core.xor import encrypt as xor_encrypt
+from core.xor import decrypt as xor_decrypt
 
 
 class TextAreaSection(ctk.CTkFrame):
@@ -243,6 +245,7 @@ class TextAreaSection(ctk.CTkFrame):
     def encrypt_text(self):
 
         algorithm = self.master.controls.algorithm_menu.get()
+        
         key = self.master.controls.key_entry.get()
         text = self.input_text.get("1.0", "end-1c")
 
@@ -299,7 +302,24 @@ class TextAreaSection(ctk.CTkFrame):
             success_message = (
             "●  Success     Text encrypted successfully using Vigenère Cipher."
         )
+        elif algorithm == "XOR Cipher":
 
+            try:
+                key = int(key)
+            except ValueError:
+                self.set_status(
+            "●  Error     XOR Cipher key must be a number.",
+            "#FF5555"
+        )
+                return
+
+            result = xor_encrypt(text, key)
+
+            
+
+            success_message = (
+        "●  Success     Text encrypted successfully using XOR Cipher."
+    )
     # --------------------------------
     # Other algorithms
     # --------------------------------
@@ -387,6 +407,23 @@ class TextAreaSection(ctk.CTkFrame):
             success_message = (
             "●  Success     Text decrypted successfully using Vigenère Cipher."
         )
+
+        elif algorithm == "XOR Cipher":
+
+            try:
+                key = int(key)
+            except ValueError:
+                self.set_status(
+            "●  Error     XOR Cipher key must be a number.",
+            "#FF5555"
+        )
+                return
+
+            result = xor_decrypt(text, key)
+
+            success_message = (
+        "●  Success     Text decrypted successfully using XOR Cipher."
+    )    
 
     # --------------------------------
     # Other Algorithms
