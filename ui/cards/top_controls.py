@@ -59,16 +59,17 @@ class TopControls(ctk.CTkFrame):
         mode_label.grid(row=0, column=1, sticky="w")
 
         self.mode_menu = ctk.CTkOptionMenu(
-            self,
-            values=[
-                "Encrypt",
-                "Decrypt"
-            ],
-            height=38,
-            fg_color="#B71C1C",
-            button_color="#8B0000",
-            button_hover_color="#6A0000"
-        )
+           self,
+        values=[
+        "Encrypt",
+        "Decrypt"
+    ],
+        height=38,
+        fg_color="#B71C1C",
+        button_color="#8B0000",
+        button_hover_color="#6A0000",
+        
+)
 
         self.mode_menu.grid(
             row=1,
@@ -105,3 +106,30 @@ class TopControls(ctk.CTkFrame):
             columnspan=2,
             sticky="ew"
         )
+
+def mode_changed(self, mode):
+    """Update the active operation button based on selected mode."""
+
+    text_area = self.master.text_area
+
+    if mode == "Encrypt":
+        text_area.encrypt_button.configure(
+            fg_color="#E3262E",
+            hover_color="#B91C24"
+        )
+
+        text_area.decrypt_button.configure(
+            fg_color="#333333",
+            hover_color="#444444"
+        )
+
+    elif mode == "Decrypt":
+        text_area.decrypt_button.configure(
+            fg_color="#E3262E",
+            hover_color="#B91C24"
+        )
+
+        text_area.encrypt_button.configure(
+            fg_color="#333333",
+            hover_color="#444444"
+        )        
