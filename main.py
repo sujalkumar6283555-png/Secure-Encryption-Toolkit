@@ -79,4 +79,4 @@ class SecureEncryptionToolkit(ctk.CTk):
 # ----------------------------
 if __name__ == "__main__":
     app = SecureEncryptionToolkit()
-    app.mainloop()          
+    app.mainloop()           

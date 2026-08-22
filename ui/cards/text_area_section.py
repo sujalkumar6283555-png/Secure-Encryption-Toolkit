@@ -343,7 +343,17 @@ class TextAreaSection(ctk.CTkFrame):
         success_message,
         "#4CAF50"
     )
+        self.winfo_toplevel().history.add_history(
+    algorithm,
+    "Encrypt",
+    key,
+    text,
+    result
+)
+        
 
+        
+       
     # ========================================
     # DECRYPT
     # ========================================
@@ -448,6 +458,13 @@ class TextAreaSection(ctk.CTkFrame):
         success_message,
         "#4CAF50"
     )
+        self.winfo_toplevel().history.add_history(
+    algorithm,
+    "Decrypt",
+    key,
+    text,
+    result
+)
 
     # ========================================
     # COPY OUTPUT
