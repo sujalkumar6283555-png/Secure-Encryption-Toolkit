@@ -114,15 +114,17 @@ class SecureEncryptionToolkit(ctk.CTk):
 
     def handle_menu_click(self, key):
 
-        # Keep workspace and history visible
-        self.workspace.grid()
-        self.history.grid()
-
         # --------------------------------
         # Encrypt / Decrypt
         # --------------------------------
 
         if key == "encrypt":
+
+            # Show normal encryption card
+            self.workspace.show_encryption()
+
+            # Keep history visible
+            self.history.grid()
 
             self.workspace.card.text_area.set_status(
                 "●  Ready     Enter your text and select an algorithm to begin.",
@@ -135,13 +137,33 @@ class SecureEncryptionToolkit(ctk.CTk):
 
         elif key == "history":
 
+            # Keep normal encryption workspace visible
+            self.workspace.show_encryption()
+
+            self.history.grid()
+
             self.history.search.focus_set()
+
+        # --------------------------------
+        # File Encryption
+        # --------------------------------
+
+        elif key == "file":
+
+            # Show File Encryption card
+            self.workspace.show_file_encryption()
+
+            # Keep history visible
+            self.history.grid()
 
         # --------------------------------
         # Caesar Cipher
         # --------------------------------
 
         elif key == "caesar":
+
+            # Make sure normal encryption card is visible
+            self.workspace.show_encryption()
 
             self.workspace.card.controls.algorithm_menu.set(
                 "Caesar Cipher"
@@ -158,6 +180,9 @@ class SecureEncryptionToolkit(ctk.CTk):
 
         elif key == "vigenere":
 
+            # Make sure normal encryption card is visible
+            self.workspace.show_encryption()
+
             self.workspace.card.controls.algorithm_menu.set(
                 "Vigenère Cipher"
             )
@@ -173,6 +198,9 @@ class SecureEncryptionToolkit(ctk.CTk):
 
         elif key == "xor":
 
+            # Make sure normal encryption card is visible
+            self.workspace.show_encryption()
+
             self.workspace.card.controls.algorithm_menu.set(
                 "XOR Cipher"
             )
@@ -187,6 +215,9 @@ class SecureEncryptionToolkit(ctk.CTk):
         # --------------------------------
 
         else:
+
+            # Return to normal encryption card
+            self.workspace.show_encryption()
 
             self.workspace.card.text_area.set_status(
                 f"●  {key.title()} section is coming soon.",
