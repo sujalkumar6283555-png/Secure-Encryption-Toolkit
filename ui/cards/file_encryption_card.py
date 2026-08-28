@@ -367,6 +367,21 @@ class FileEncryptionCard(ctk.CTkFrame):
         )
 
     # ========================================
+    # STATUS HELPER
+    # ========================================
+
+    def set_status(self, title, description, color):
+
+        self.status_label.configure(
+            text=title,
+            text_color=color
+        )
+
+        self.status_description.configure(
+            text=description
+        )
+
+    # ========================================
     # XOR FILE PROCESSING
     # ========================================
 
@@ -376,14 +391,227 @@ class FileEncryptionCard(ctk.CTkFrame):
 
             data = source.read()
 
-        encrypted_data = bytes(
+        processed_data = bytes(
             byte ^ key
             for byte in data
         )
 
         with open(output_file, "wb") as destination:
 
-            destination.write(encrypted_data)
+            destination.write(processed_data)
+
+    # ========================================
+    # CAESAR FILE PROCESSING
+    # ========================================
+
+    def caesar_process_file(
+        self,
+        input_file,
+        output_file,
+        key,
+        decrypt_mode=False
+    ):
+
+        with open(input_file, "rb") as source:
+
+            data = source.read()
+
+        if decrypt_mode:
+
+            processed_data = bytes(
+                (byte - key) % 256
+                for byte in data
+            )
+
+        else:
+
+            processed_data = bytes(
+                (byte + key) % 256
+                for byte in data
+            )
+
+        with open(output_file, "wb") as destination:
+
+            destination.write(processed_data)
+
+    # ========================================
+    # VIGENERE FILE PROCESSING
+    # ========================================
+
+    def vigenere_process_file(
+        self,
+        input_file,
+        output_file,
+        key,
+        decrypt_mode=False
+    ):
+
+        key_bytes = key.encode("utf-8")
+
+        if not key_bytes:
+            raise ValueError("Vigenère key cannot be empty.")
+
+        with open(input_file, "rb") as source:
+
+            data = source.read()
+
+        processed = bytearray()
+
+        for index, byte in enumerate(data):
+
+            key_byte = key_bytes[index % len(key_bytes)]
+
+            if decrypt_mode:
+
+                new_byte = (byte - key_byte) % 256
+
+            else:
+
+                new_byte = (byte + key_byte) % 256
+
+            processed.append(new_byte)
+
+        with open(output_file, "wb") as destination:
+
+            destination.write(processed)
+
+    # ========================================
+    # VALIDATE KEY
+    # ========================================
+
+    def validate_key(self, algorithm, key):
+
+        if not key:
+
+            self.set_status(
+                "●  Error",
+                "Please enter an encryption key.",
+                "#FF5555"
+            )
+
+            return None
+
+        # --------------------------------
+        # Caesar
+        # --------------------------------
+
+        if algorithm == "Caesar Cipher":
+
+            try:
+
+                numeric_key = int(key)
+
+                if numeric_key < 0 or numeric_key > 255:
+
+                    raise ValueError
+
+                return numeric_key
+
+            except ValueError:
+
+                self.set_status(
+                    "●  Error",
+                    "Caesar key must be a number between 0 and 255.",
+                    "#FF5555"
+                )
+
+                return None
+
+        # --------------------------------
+        # XOR
+        # --------------------------------
+
+        if algorithm == "XOR Cipher":
+
+            try:
+
+                numeric_key = int(key)
+
+                if numeric_key < 0 or numeric_key > 255:
+
+                    raise ValueError
+
+                return numeric_key
+
+            except ValueError:
+
+                self.set_status(
+                    "●  Error",
+                    "XOR key must be a number between 0 and 255.",
+                    "#FF5555"
+                )
+
+                return None
+
+        # --------------------------------
+        # Vigenère
+        # --------------------------------
+
+        if algorithm == "Vigenère Cipher":
+
+            if not key.isascii() or not key.isalpha():
+
+                self.set_status(
+                    "●  Error",
+                    "Vigenère key must contain letters only.",
+                    "#FF5555"
+                )
+
+                return None
+
+            return key
+
+        return None
+
+    # ========================================
+    # CREATE ENCRYPTED OUTPUT FILE
+    # ========================================
+
+    def get_encrypted_output_path(self):
+
+        directory = os.path.dirname(
+            self.selected_file
+        )
+
+        filename = os.path.basename(
+            self.selected_file
+        )
+
+        output_file = os.path.join(
+            directory,
+            filename + ".encrypted"
+        )
+
+        return output_file
+
+    # ========================================
+    # CREATE DECRYPTED OUTPUT FILE
+    # ========================================
+
+    def get_decrypted_output_path(self):
+
+        directory = os.path.dirname(
+            self.selected_file
+        )
+
+        filename = os.path.basename(
+            self.selected_file
+        )
+
+        if filename.endswith(".encrypted"):
+
+            original_filename = filename[:-10]
+
+        else:
+
+            original_filename = filename
+
+        output_file = os.path.join(
+            directory,
+            "decrypted_" + original_filename
+        )
+
+        return output_file
 
     # ========================================
     # ENCRYPT FILE
@@ -391,122 +619,135 @@ class FileEncryptionCard(ctk.CTkFrame):
 
     def encrypt_file(self):
 
+        # --------------------------------
+        # Check File
+        # --------------------------------
+
         if not self.selected_file:
 
-            self.status_label.configure(
-                text="●  Error",
-                text_color="#FF5555"
-            )
-
-            self.status_description.configure(
-                text="Please select a file first."
+            self.set_status(
+                "●  Error",
+                "Please select a file first.",
+                "#FF5555"
             )
 
             return
+
+        # --------------------------------
+        # Get Algorithm
+        # --------------------------------
 
         algorithm = self.algorithm_menu.get()
+
+        # --------------------------------
+        # Get Key
+        # --------------------------------
+
         key = self.key_entry.get().strip()
 
-        # --------------------------------
-        # Check Algorithm
-        # --------------------------------
-
-        if algorithm != "XOR Cipher":
-
-            self.status_label.configure(
-                text="●  Coming Soon",
-                text_color="#FFB000"
-            )
-
-            self.status_description.configure(
-                text=f"{algorithm} file encryption is coming soon."
-            )
-
-            return
-
-        # --------------------------------
-        # Validate Key
-        # --------------------------------
-
-        if not key:
-
-            self.status_label.configure(
-                text="●  Error",
-                text_color="#FF5555"
-            )
-
-            self.status_description.configure(
-                text="Please enter an encryption key."
-            )
-
-            return
-
-        try:
-
-            key = int(key)
-
-            if key < 0 or key > 255:
-
-                raise ValueError
-
-        except ValueError:
-
-            self.status_label.configure(
-                text="●  Error",
-                text_color="#FF5555"
-            )
-
-            self.status_description.configure(
-                text="XOR key must be a number between 0 and 255."
-            )
-
-            return
-
-        # --------------------------------
-        # Create Output File
-        # --------------------------------
-
-        directory = os.path.dirname(self.selected_file)
-        filename = os.path.basename(self.selected_file)
-
-        output_file = os.path.join(
-            directory,
-            filename + ".encrypted"
+        validated_key = self.validate_key(
+            algorithm,
+            key
         )
 
+        if validated_key is None:
+
+            return
+
+        key = validated_key
+
+        # --------------------------------
+        # Create Output
+        # --------------------------------
+
+        output_file = self.get_encrypted_output_path()
+
         try:
 
-            self.xor_process_file(
-                self.selected_file,
-                output_file,
-                key
+            # --------------------------------
+            # Caesar Cipher
+            # --------------------------------
+
+            if algorithm == "Caesar Cipher":
+
+                self.caesar_process_file(
+                    self.selected_file,
+                    output_file,
+                    key,
+                    decrypt_mode=False
+                )
+
+            # --------------------------------
+            # Vigenère Cipher
+            # --------------------------------
+
+            elif algorithm == "Vigenère Cipher":
+
+                self.vigenere_process_file(
+                    self.selected_file,
+                    output_file,
+                    key,
+                    decrypt_mode=False
+                )
+
+            # --------------------------------
+            # XOR Cipher
+            # --------------------------------
+
+            elif algorithm == "XOR Cipher":
+
+                self.xor_process_file(
+                    self.selected_file,
+                    output_file,
+                    key
+                )
+
+            else:
+
+                self.set_status(
+                    "●  Error",
+                    "Unsupported encryption algorithm.",
+                    "#FF5555"
+                )
+
+                return
+
+            # --------------------------------
+            # Success
+            # --------------------------------
+
+            output_name = os.path.basename(
+                output_file
             )
 
-            self.status_label.configure(
-                text="●  Success",
-                text_color="#4CAF50"
+            input_name = os.path.basename(
+                self.selected_file
             )
 
-            self.status_description.configure(
-                text=f"Encrypted file created: {os.path.basename(output_file)}"
+            self.set_status(
+                "●  Success",
+                f"Encrypted file created: {output_name}",
+                "#4CAF50"
             )
+
+            # --------------------------------
+            # Add History
+            # --------------------------------
+
             self.winfo_toplevel().history.add_history(
                 algorithm,
                 "Encrypt File",
                 key,
-                os.path.basename(self.selected_file),
-                os.path.basename(output_file)
-)
+                input_name,
+                output_name
+            )
 
         except Exception as error:
 
-            self.status_label.configure(
-                text="●  Error",
-                text_color="#FF5555"
-            )
-
-            self.status_description.configure(
-                text=f"Encryption failed: {error}"
+            self.set_status(
+                "●  Error",
+                f"Encryption failed: {error}",
+                "#FF5555"
             )
 
     # ========================================
@@ -515,128 +756,133 @@ class FileEncryptionCard(ctk.CTkFrame):
 
     def decrypt_file(self):
 
+        # --------------------------------
+        # Check File
+        # --------------------------------
+
         if not self.selected_file:
 
-            self.status_label.configure(
-                text="●  Error",
-                text_color="#FF5555"
-            )
-
-            self.status_description.configure(
-                text="Please select an encrypted file first."
+            self.set_status(
+                "●  Error",
+                "Please select an encrypted file first.",
+                "#FF5555"
             )
 
             return
+
+        # --------------------------------
+        # Get Algorithm
+        # --------------------------------
 
         algorithm = self.algorithm_menu.get()
+
+        # --------------------------------
+        # Get Key
+        # --------------------------------
+
         key = self.key_entry.get().strip()
 
-        # --------------------------------
-        # Check Algorithm
-        # --------------------------------
-
-        if algorithm != "XOR Cipher":
-
-            self.status_label.configure(
-                text="●  Coming Soon",
-                text_color="#FFB000"
-            )
-
-            self.status_description.configure(
-                text=f"{algorithm} file decryption is coming soon."
-            )
-
-            return
-
-        # --------------------------------
-        # Validate Key
-        # --------------------------------
-
-        if not key:
-
-            self.status_label.configure(
-                text="●  Error",
-                text_color="#FF5555"
-            )
-
-            self.status_description.configure(
-                text="Please enter the encryption key."
-            )
-
-            return
-
-        try:
-
-            key = int(key)
-
-            if key < 0 or key > 255:
-
-                raise ValueError
-
-        except ValueError:
-
-            self.status_label.configure(
-                text="●  Error",
-                text_color="#FF5555"
-            )
-
-            self.status_description.configure(
-                text="XOR key must be a number between 0 and 255."
-            )
-
-            return
-
-        # --------------------------------
-        # Create Decrypted File
-        # --------------------------------
-
-        directory = os.path.dirname(self.selected_file)
-        filename = os.path.basename(self.selected_file)
-
-        if filename.endswith(".encrypted"):
-
-            original_filename = filename[:-10]
-
-        else:
-
-            original_filename = filename + ".decrypted"
-
-        output_file = os.path.join(
-            directory,
-            "decrypted_" + original_filename
+        validated_key = self.validate_key(
+            algorithm,
+            key
         )
 
+        if validated_key is None:
+
+            return
+
+        key = validated_key
+
+        # --------------------------------
+        # Create Output
+        # --------------------------------
+
+        output_file = self.get_decrypted_output_path()
+
         try:
 
-            self.xor_process_file(
-                self.selected_file,
-                output_file,
-                key
+            # --------------------------------
+            # Caesar Cipher
+            # --------------------------------
+
+            if algorithm == "Caesar Cipher":
+
+                self.caesar_process_file(
+                    self.selected_file,
+                    output_file,
+                    key,
+                    decrypt_mode=True
+                )
+
+            # --------------------------------
+            # Vigenère Cipher
+            # --------------------------------
+
+            elif algorithm == "Vigenère Cipher":
+
+                self.vigenere_process_file(
+                    self.selected_file,
+                    output_file,
+                    key,
+                    decrypt_mode=True
+                )
+
+            # --------------------------------
+            # XOR Cipher
+            # --------------------------------
+
+            elif algorithm == "XOR Cipher":
+
+                self.xor_process_file(
+                    self.selected_file,
+                    output_file,
+                    key
+                )
+
+            else:
+
+                self.set_status(
+                    "●  Error",
+                    "Unsupported decryption algorithm.",
+                    "#FF5555"
+                )
+
+                return
+
+            # --------------------------------
+            # Success
+            # --------------------------------
+
+            output_name = os.path.basename(
+                output_file
             )
 
-            self.status_label.configure(
-                text="●  Success",
-                text_color="#4CAF50"
+            input_name = os.path.basename(
+                self.selected_file
             )
 
-            self.status_description.configure(
-                text=f"Decrypted file created: {os.path.basename(output_file)}"
+            self.set_status(
+                "●  Success",
+                f"Decrypted file created: {output_name}",
+                "#4CAF50"
             )
+
+            # --------------------------------
+            # Add History
+            # --------------------------------
+
             self.winfo_toplevel().history.add_history(
                 algorithm,
                 "Decrypt File",
                 key,
-                os.path.basename(self.selected_file),
-                os.path.basename(output_file)
-)
+                input_name,
+                output_name
+            )
 
         except Exception as error:
 
-            self.status_label.configure(
-                text="●  Error",
-                text_color="#FF5555"
-            )
-
-            self.status_description.configure(
-                text=f"Decryption failed: {error}"
+            self.set_status(
+                "●  Error",
+                f"Decryption failed: {error}",
+                "#FF5555"
             )
