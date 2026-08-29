@@ -4,6 +4,7 @@ from ui.header import Header
 from ui.sidebar import Sidebar
 from ui.workspace import Workspace
 from ui.history_panel import HistoryPanel
+from ui.settings_panel import SettingsPanel
 
 
 # ----------------------------
@@ -73,19 +74,16 @@ class SecureEncryptionToolkit(ctk.CTk):
             weight=1
         )
 
-        # Sidebar
         self.content_frame.grid_columnconfigure(
             0,
             weight=0
         )
 
-        # Workspace
         self.content_frame.grid_columnconfigure(
             1,
             weight=1
         )
 
-        # History
         self.content_frame.grid_columnconfigure(
             2,
             weight=0
@@ -109,7 +107,7 @@ class SecureEncryptionToolkit(ctk.CTk):
         )
 
     # ==================================================
-    # Sidebar Navigation
+    # SIDEBAR NAVIGATION
     # ==================================================
 
     def handle_menu_click(self, key):
@@ -120,10 +118,8 @@ class SecureEncryptionToolkit(ctk.CTk):
 
         if key == "encrypt":
 
-            # Show normal encryption card
             self.workspace.show_encryption()
 
-            # Show normal history
             self.history.show_history()
             self.history.grid()
 
@@ -138,10 +134,8 @@ class SecureEncryptionToolkit(ctk.CTk):
 
         elif key == "history":
 
-            # Show normal encryption workspace
             self.workspace.show_encryption()
 
-            # Show history panel
             self.history.show_history()
             self.history.grid()
 
@@ -153,10 +147,8 @@ class SecureEncryptionToolkit(ctk.CTk):
 
         elif key == "favorites":
 
-            # Keep normal encryption workspace visible
             self.workspace.show_encryption()
 
-            # Show favorites in right panel
             self.history.show_favorites_panel()
             self.history.grid()
 
@@ -166,10 +158,8 @@ class SecureEncryptionToolkit(ctk.CTk):
 
         elif key == "file":
 
-            # Show File Encryption card
             self.workspace.show_file_encryption()
 
-            # Keep history visible
             self.history.show_history()
             self.history.grid()
 
@@ -179,10 +169,8 @@ class SecureEncryptionToolkit(ctk.CTk):
 
         elif key == "caesar":
 
-            # Make sure normal encryption card is visible
             self.workspace.show_encryption()
 
-            # Return history panel to normal history
             self.history.show_history()
             self.history.grid()
 
@@ -201,10 +189,8 @@ class SecureEncryptionToolkit(ctk.CTk):
 
         elif key == "vigenere":
 
-            # Make sure normal encryption card is visible
             self.workspace.show_encryption()
 
-            # Return history panel to normal history
             self.history.show_history()
             self.history.grid()
 
@@ -223,10 +209,8 @@ class SecureEncryptionToolkit(ctk.CTk):
 
         elif key == "xor":
 
-            # Make sure normal encryption card is visible
             self.workspace.show_encryption()
 
-            # Return history panel to normal history
             self.history.show_history()
             self.history.grid()
 
@@ -240,15 +224,37 @@ class SecureEncryptionToolkit(ctk.CTk):
             )
 
         # --------------------------------
-        # Other Sections
+        # Settings
+        # --------------------------------
+
+        elif key == "settings":
+
+            SettingsPanel(self)
+
+        # --------------------------------
+        # About
+        # --------------------------------
+
+        elif key == "about":
+
+            self.workspace.show_encryption()
+
+            self.history.show_history()
+            self.history.grid()
+
+            self.workspace.card.text_area.set_status(
+                "●  About section is coming soon.",
+                "#FFB000"
+            )
+
+        # --------------------------------
+        # Other
         # --------------------------------
 
         else:
 
-            # Return to normal encryption card
             self.workspace.show_encryption()
 
-            # Return history to normal mode
             self.history.show_history()
             self.history.grid()
 
@@ -265,5 +271,5 @@ class SecureEncryptionToolkit(ctk.CTk):
 if __name__ == "__main__":
 
     app = SecureEncryptionToolkit()
-
+ 
     app.mainloop()
