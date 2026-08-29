@@ -123,7 +123,8 @@ class SecureEncryptionToolkit(ctk.CTk):
             # Show normal encryption card
             self.workspace.show_encryption()
 
-            # Keep history visible
+            # Show normal history
+            self.history.show_history()
             self.history.grid()
 
             self.workspace.card.text_area.set_status(
@@ -137,12 +138,27 @@ class SecureEncryptionToolkit(ctk.CTk):
 
         elif key == "history":
 
-            # Keep normal encryption workspace visible
+            # Show normal encryption workspace
             self.workspace.show_encryption()
 
+            # Show history panel
+            self.history.show_history()
             self.history.grid()
 
             self.history.search.focus_set()
+
+        # --------------------------------
+        # Favorites
+        # --------------------------------
+
+        elif key == "favorites":
+
+            # Keep normal encryption workspace visible
+            self.workspace.show_encryption()
+
+            # Show favorites in right panel
+            self.history.show_favorites_panel()
+            self.history.grid()
 
         # --------------------------------
         # File Encryption
@@ -154,6 +170,7 @@ class SecureEncryptionToolkit(ctk.CTk):
             self.workspace.show_file_encryption()
 
             # Keep history visible
+            self.history.show_history()
             self.history.grid()
 
         # --------------------------------
@@ -164,6 +181,10 @@ class SecureEncryptionToolkit(ctk.CTk):
 
             # Make sure normal encryption card is visible
             self.workspace.show_encryption()
+
+            # Return history panel to normal history
+            self.history.show_history()
+            self.history.grid()
 
             self.workspace.card.controls.algorithm_menu.set(
                 "Caesar Cipher"
@@ -183,6 +204,10 @@ class SecureEncryptionToolkit(ctk.CTk):
             # Make sure normal encryption card is visible
             self.workspace.show_encryption()
 
+            # Return history panel to normal history
+            self.history.show_history()
+            self.history.grid()
+
             self.workspace.card.controls.algorithm_menu.set(
                 "Vigenère Cipher"
             )
@@ -201,6 +226,10 @@ class SecureEncryptionToolkit(ctk.CTk):
             # Make sure normal encryption card is visible
             self.workspace.show_encryption()
 
+            # Return history panel to normal history
+            self.history.show_history()
+            self.history.grid()
+
             self.workspace.card.controls.algorithm_menu.set(
                 "XOR Cipher"
             )
@@ -218,6 +247,10 @@ class SecureEncryptionToolkit(ctk.CTk):
 
             # Return to normal encryption card
             self.workspace.show_encryption()
+
+            # Return history to normal mode
+            self.history.show_history()
+            self.history.grid()
 
             self.workspace.card.text_area.set_status(
                 f"●  {key.title()} section is coming soon.",

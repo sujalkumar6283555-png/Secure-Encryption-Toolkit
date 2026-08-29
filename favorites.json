@@ -1,0 +1,16 @@
+[
+    {
+        "algorithm": "Vigen\u00e8re Cipher",
+        "action": "Decrypt",
+        "key": "sujal",
+        "input": "zyulz es waxw cb sfbuu",
+        "output": "hello my name is sujal"
+    },
+    {
+        "algorithm": "Vigen\u00e8re Cipher",
+        "action": "Encrypt",
+        "key": "sujal",
+        "input": "hello my name is sujal",
+        "output": "zyulz es waxw cb sfbuu"
+    }
+]
