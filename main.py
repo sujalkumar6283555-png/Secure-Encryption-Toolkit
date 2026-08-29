@@ -5,6 +5,7 @@ from ui.sidebar import Sidebar
 from ui.workspace import Workspace
 from ui.history_panel import HistoryPanel
 from ui.settings_panel import SettingsPanel
+from ui.about_panel import AboutPanel
 
 
 # ----------------------------
@@ -237,18 +238,10 @@ class SecureEncryptionToolkit(ctk.CTk):
 
         elif key == "about":
 
-            self.workspace.show_encryption()
-
-            self.history.show_history()
-            self.history.grid()
-
-            self.workspace.card.text_area.set_status(
-                "●  About section is coming soon.",
-                "#FFB000"
-            )
+            AboutPanel(self)
 
         # --------------------------------
-        # Other
+        # Other Sections
         # --------------------------------
 
         else:
@@ -271,5 +264,5 @@ class SecureEncryptionToolkit(ctk.CTk):
 if __name__ == "__main__":
 
     app = SecureEncryptionToolkit()
- 
+
     app.mainloop()
