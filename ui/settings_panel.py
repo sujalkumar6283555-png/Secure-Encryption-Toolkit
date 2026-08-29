@@ -12,7 +12,7 @@ class SettingsPanel(ctk.CTkToplevel):
         # --------------------------------
 
         self.title("Settings")
-        self.geometry("500x500")
+        self.geometry("500x650")
         self.resizable(False, False)
 
         self.configure(
@@ -22,6 +22,9 @@ class SettingsPanel(ctk.CTkToplevel):
         # Keep window above main application
         self.transient(parent)
         self.grab_set()
+
+        # Store reference to main application
+        self.parent = parent
 
         # --------------------------------
         # TITLE
@@ -126,6 +129,89 @@ class SettingsPanel(ctk.CTkToplevel):
         )
 
         # ========================================
+        # ALGORITHM SECTION
+        # ========================================
+
+        algorithm_label = ctk.CTkLabel(
+            self,
+            text="Encryption",
+            font=("Segoe UI", 16, "bold"),
+            text_color="#FFFFFF"
+        )
+
+        algorithm_label.pack(
+            anchor="w",
+            padx=30,
+            pady=(0, 10)
+        )
+
+        # --------------------------------
+        # DEFAULT ALGORITHM
+        # --------------------------------
+
+        algorithm_frame = ctk.CTkFrame(
+            self,
+            fg_color="#1A1A1A",
+            corner_radius=10
+        )
+
+        algorithm_frame.pack(
+            fill="x",
+            padx=30,
+            pady=(0, 25)
+        )
+
+        algorithm_title = ctk.CTkLabel(
+            algorithm_frame,
+            text="Default Algorithm",
+            font=("Segoe UI", 14, "bold")
+        )
+
+        algorithm_title.pack(
+            side="left",
+            padx=15,
+            pady=15
+        )
+
+        self.algorithm_menu = ctk.CTkOptionMenu(
+            algorithm_frame,
+            values=[
+                "Caesar Cipher",
+                "Vigenère Cipher",
+                "XOR Cipher"
+            ],
+            width=160,
+            height=36,
+            fg_color="#B71C1C",
+            button_color="#8B0000",
+            button_hover_color="#6A0000",
+            command=self.change_algorithm
+        )
+
+        self.algorithm_menu.set("Caesar Cipher")
+
+        self.algorithm_menu.pack(
+            side="right",
+            padx=15,
+            pady=10
+        )
+
+        # ========================================
+        # STATUS
+        # ========================================
+
+        self.status_label = ctk.CTkLabel(
+            self,
+            text="●  Settings updated",
+            font=("Segoe UI", 12),
+            text_color="#4CAF50"
+        )
+
+        self.status_label.pack(
+            pady=(5, 15)
+        )
+
+        # ========================================
         # INFORMATION
         # ========================================
 
@@ -137,7 +223,7 @@ class SettingsPanel(ctk.CTkToplevel):
         )
 
         info_label.pack(
-            pady=20
+            pady=10
         )
 
         # ========================================
@@ -177,3 +263,32 @@ class SettingsPanel(ctk.CTkToplevel):
         elif selected_theme == "System":
 
             ctk.set_appearance_mode("System")
+
+        self.status_label.configure(
+            text=f"●  Theme changed to {selected_theme}",
+            text_color="#4CAF50"
+        )
+
+    # ========================================
+    # CHANGE DEFAULT ALGORITHM
+    # ========================================
+
+    def change_algorithm(self, selected_algorithm):
+
+        try:
+
+            self.parent.workspace.card.controls.algorithm_menu.set(
+                selected_algorithm
+            )
+
+            self.status_label.configure(
+                text=f"●  Default algorithm: {selected_algorithm}",
+                text_color="#4CAF50"
+            )
+
+        except Exception:
+
+            self.status_label.configure(
+                text="●  Unable to change algorithm",
+                text_color="#FF5555"
+            )
